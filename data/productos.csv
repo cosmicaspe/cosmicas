@@ -1,7 +1,7 @@
-id;nombre;categoria;precio;precio_antes;descripcion;color;talla;stock;imagen_frente;imagen_diagonal;imagen_costado;destacado;orden
-ACR-001;Anillo Lim√≥n;Acr√≠licos;25;;Anillo chunky de acr√≠lico verde lima con cristal central.;Verde lima;M;2;acr-001-frente.jpg;acr-001-diagonal.jpg;acr-001-costado.jpg;SI;1
-ACR-002;Anillo Lavanda;Acr√≠licos;25;;Anillo de acr√≠lico lila con cristal verde y borde dorado.;Lila;S;1;acr-002-frente.jpg;acr-002-diagonal.jpg;acr-002-costado.jpg;NO;2
-ACR-003;Anillo Mandarina;Acr√≠licos;28;32;Anillo de acr√≠lico naranja con cristal azul y brillos.;Naranja;L;3;acr-003-frente.jpg;acr-003-diagonal.jpg;acr-003-costado.jpg;NO;3
-ACR-004;Anillo Menta;Acr√≠licos;30;;Anillo de acr√≠lico menta con cristales de colores.;Menta;M;0;acr-004-frente.jpg;acr-004-diagonal.jpg;acr-004-costado.jpg;NO;4
-ACE-001;Anillo Ojo de Tigre;Acero inoxidable;45;;Anillo ancho de acero inoxidable dorado con piedra ojo de tigre.;Dorado;Ajustable;1;ace-001-frente.jpg;ace-001-diagonal.jpg;ace-001-costado.jpg;SI;5
-HEC-001;Anillo Galaxia;Hechos a mano;35;;Pieza de ejemplo para la categor√≠a hechos a mano.;Morado;M;1;hec-001-frente.jpg;hec-001-diagonal.jpg;hec-001-costado.jpg;NO;6
+id,nombre,categoria,precio,precio_antes,descripcion,color,talla,stock,imagen_frente,imagen_diagonal,imagen_costado,destacado,orden
+ACR-001,Esfera cÛsmica Azul,AcrÌlicros,25,33,Esfera cosmica Azul,Azul,M,1,acr-001-frente.jpg,acr-001-diagonal.jpg,acr-001-costado.jpg,SI,1
+ACR-002,Esfera cÛsmica Lila,AcrÌlicros,25,33,Esfera cosmica Lila,Lila,M,1,acr-002-frente.jpg,acr-002-diagonal.jpg,acr-002-costado.jpg,NO,2
+ACR-003,Esfera cÛsmica Verde,AcrÌlicros,25,33,Esfera cosmica Verde,Verde,M,1,acr-003-frente.jpg,acr-003-diagonal.jpg,acr-003-costado.jpg,NO,3
+ACR-004,Cubo estelar Celeste,AcrÌlicros,25,33,Cubo estelar Celeste,Celeste,S,0,acr-004-frente.jpg,acr-004-diagonal.jpg,acr-004-costado.jpg,NO,4
+ACR-005,Cubo estelar Rosa,Acero inoxidable,25,33,Cubo estelar Rosa,Rosa,S,1,acr-005-frente.jpg,ace-005-diagonal.jpg,ace-005-costado.jpg,SI,5
+ACR-006,Anillos Eclectic,Acero inoxidable,10,13,Anillos Eclectic,Por definir,Ajustable,1,acr-002-frente.jpg,hec-001-diagonal.jpg,hec-001-costado.jpg,NO,6
