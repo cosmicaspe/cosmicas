@@ -1,0 +1,7 @@
+id;nombre;categoria;precio;precio_antes;descripcion;color;talla;stock;imagen_frente;imagen_diagonal;imagen_costado;destacado;orden
+ACR-001;Anillo Limón;Acrílicos;25;;Anillo chunky de acrílico verde lima con cristal central.;Verde lima;M;2;acr-001-frente.jpg;acr-001-diagonal.jpg;acr-001-costado.jpg;SI;1
+ACR-002;Anillo Lavanda;Acrílicos;25;;Anillo de acrílico lila con cristal verde y borde dorado.;Lila;S;1;acr-002-frente.jpg;acr-002-diagonal.jpg;acr-002-costado.jpg;NO;2
+ACR-003;Anillo Mandarina;Acrílicos;28;32;Anillo de acrílico naranja con cristal azul y brillos.;Naranja;L;3;acr-003-frente.jpg;acr-003-diagonal.jpg;acr-003-costado.jpg;NO;3
+ACR-004;Anillo Menta;Acrílicos;30;;Anillo de acrílico menta con cristales de colores.;Menta;M;0;acr-004-frente.jpg;acr-004-diagonal.jpg;acr-004-costado.jpg;NO;4
+ACE-001;Anillo Ojo de Tigre;Acero inoxidable;45;;Anillo ancho de acero inoxidable dorado con piedra ojo de tigre.;Dorado;Ajustable;1;ace-001-frente.jpg;ace-001-diagonal.jpg;ace-001-costado.jpg;SI;5
+HEC-001;Anillo Galaxia;Hechos a mano;35;;Pieza de ejemplo para la categoría hechos a mano.;Morado;M;1;hec-001-frente.jpg;hec-001-diagonal.jpg;hec-001-costado.jpg;NO;6
