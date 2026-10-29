@@ -3,7 +3,7 @@
   var P = [], cart = [], lastFocus = null;
   try { cart = JSON.parse(localStorage.getItem("cosmicas-carrito") || "[]"); } catch (e) {}
   var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
-  var precio = function (n) { return "S/ " + (n % 1 ? n.toFixed(2) : n); };
+  var precio = function (n) { return "S/. " + (n % 1 ? n.toFixed(2) : n); };
   var slug = function (s) { return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-"); };
   var num = function (v) { return parseFloat(String(v).replace(",", ".")) || 0; };
   var VISTAS = ["frente", "diagonal", "costado"];
