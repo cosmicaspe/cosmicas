@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Catálogo · Cósmicas</title>
+<meta name="description" content="Catálogo de anillos Cósmicas: acrílicos, acero inoxidable y hechos a mano. Arma tu pedido y envíalo por WhatsApp.">
+<meta property="og:title" content="Catálogo · Cósmicas">
+<meta property="og:description" content="Catálogo de anillos Cósmicas: acrílicos, acero inoxidable y hechos a mano. Arma tu pedido y envíalo por WhatsApp.">
+<meta property="og:image" content="https://cosmicas.pe/img/inicio/principal.jpg">
+<link rel="icon" href="img/marca/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/estilos.css">
+</head>
+<body data-p="catalogo">
+<main>
+<h1 class="tit">CATÁLOGO</h1>
+<div class="filt">
+<label>CATEGORÍA <select id="fc"><option value="">Todas</option></select></label>
+<label>TALLA <select id="ft"><option value="">Todas</option></select></label>
+<label><input type="checkbox" id="fd"> SOLO DISPONIBLES</label>
+<label>ORDENAR <select id="fo"><option value="">Destacados</option><option value="pa">Precio: menor a mayor</option><option value="pd">Precio: mayor a menor</option><option value="n">Nombre A-Z</option></select></label>
+<span class="cuenta" id="cuenta" aria-live="polite"></span>
+</div>
+<div class="grid" id="grid"><p class="vacio">Cargando anillos…</p></div>
+</main>
+<div class="ov" id="ov"><div class="fi" id="fi" role="dialog" aria-modal="true" aria-label="Detalle del anillo"></div></div>
+<aside class="cart" id="cart" aria-label="Mi pedido" aria-hidden="true">
+<button class="x" data-cc aria-label="Cerrar mi pedido">×</button>
+<h2>MI PEDIDO</h2>
+<div class="items" id="items"></div>
+<div class="tot"><div>TOTAL <b id="tot">S/ 0</b></div><p>El envío se cotiza aparte por WhatsApp.</p><a class="btn" id="envia" href="#" aria-disabled="true" rel="noopener">ENVIAR PEDIDO POR WHATSAPP</a></div>
+</aside>
+<script src="js/config.js"></script>
+<script src="js/site.js"></script>
+<script src="js/catalogo.js"></script>
+</body>
+</html>
