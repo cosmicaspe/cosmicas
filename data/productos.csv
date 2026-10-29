@@ -1,7 +1,7 @@
 id,nombre,categoria,precio,precio_antes,descripcion,color,talla,stock,imagen_frente,imagen_diagonal,imagen_costado,destacado,orden
-ACR-001,Esfera cÛsmica Azul,AcrÌlicros,25,33,Esfera cosmica Azul,Azul,M,1,acr-001-frente.jpg,acr-001-diagonal.jpg,acr-001-costado.jpg,SI,1
-ACR-002,Esfera cÛsmica Lila,AcrÌlicros,25,33,Esfera cosmica Lila,Lila,M,1,acr-002-frente.jpg,acr-002-diagonal.jpg,acr-002-costado.jpg,NO,2
-ACR-003,Esfera cÛsmica Verde,AcrÌlicros,25,33,Esfera cosmica Verde,Verde,M,1,acr-003-frente.jpg,acr-003-diagonal.jpg,acr-003-costado.jpg,NO,3
-ACR-004,Cubo estelar Celeste,AcrÌlicros,25,33,Cubo estelar Celeste,Celeste,S,0,acr-004-frente.jpg,acr-004-diagonal.jpg,acr-004-costado.jpg,NO,4
-ACR-005,Cubo estelar Rosa,Acero inoxidable,25,33,Cubo estelar Rosa,Rosa,S,1,acr-005-frente.jpg,ace-005-diagonal.jpg,ace-005-costado.jpg,SI,5
-ACR-006,Anillos Eclectic,Acero inoxidable,10,13,Anillos Eclectic,Por definir,Ajustable,1,acr-002-frente.jpg,hec-001-diagonal.jpg,hec-001-costado.jpg,NO,6
+ACR-001,Esfera c√≥smica Azul,Acr√≠licos,25,33,Esfera cosmica Azul,Azul,M,1,acr-001-frente.jpg,acr-001-diagonal.jpg,acr-001-costado.jpg,SI,1
+ACR-002,Esfera c√≥smica Lila,Acr√≠licos,25,33,Esfera cosmica Lila,Lila,M,1,acr-002-frente.jpg,acr-002-diagonal.jpg,acr-002-costado.jpg,NO,2
+ACR-003,Esfera c√≥smica Verde,Acr√≠licos,25,33,Esfera cosmica Verde,Verde,M,1,acr-003-frente.jpg,acr-003-diagonal.jpg,acr-003-costado.jpg,NO,3
+ACR-004,Cubo estelar Celeste,Acr√≠licos,25,33,Cubo estelar Celeste,Celeste,S,0,acr-004-frente.jpg,acr-004-diagonal.jpg,acr-004-costado.jpg,NO,4
+ACR-005,Cubo estelar Rosa,Acr√≠licos,25,33,Cubo estelar Rosa,Rosa,S,1,acr-005-frente.jpg,ace-005-diagonal.jpg,ace-005-costado.jpg,SI,5
+ACR-006,Anillos Eclectic,Acr√≠licos,10,13,Anillos Eclectic,Por definir,Ajustable,1,acr-006-frente.jpg,ace-006-diagonal.jpg,ace-006-costado.jpg,NO,6
