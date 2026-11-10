@@ -5,5 +5,5 @@ window.COSMICAS = {
   tt: "https://www.tiktok.com/@cosmicas.pe",
   anuncio: "✦ ENVÍOS A LIMA Y PROVINCIAS ✦",
   // carpeta de fotos según la categoría escrita en productos.csv
-  carpetas: { "Acrílicos": "acrilicos", "Acero inoxidable": "acero-inoxidable", "Hechos a mano": "hechos-a-mano" }
+  carpetas: { "Acrílicos": "acrilicos", "Acero inoxidable": "acero-inoxidable", "Hechos a mano": "hechos-a-mano", "Statement": "statement" }
 };
