@@ -13,6 +13,7 @@
   st.textContent = ".vr{display:flex;gap:8px;flex-wrap:wrap}" +
     ".vr button{position:relative;width:56px;height:56px;padding:0;border:1px solid var(--linea);background:#fff;cursor:pointer}" +
     ".vr button[aria-pressed=true]{border:2px solid var(--rojo)}" +
+    ".pill.c{top:auto;bottom:10px;left:10px;background:var(--crema);color:var(--rojo);border:1px solid var(--rojo)}" +
     ".vr img{width:100%;height:100%;object-fit:cover}" +
     ".vr .ago img{opacity:.4}" +
     '.vr .ago::after{content:"";position:absolute;inset:0;background:linear-gradient(to top right,transparent calc(50% - 1px),var(--rojo) 50%,transparent calc(50% + 1px))}';
@@ -42,6 +43,7 @@
   var guarda = function () { try { localStorage.setItem("cosmicas-carrito", JSON.stringify(cart)); } catch (e) {} };
   var gk = function (p) { return (p.grupo || "").trim().toLowerCase() || "id:" + p.id; };
   var det = function (p) { var d = [p.color, p.talla && "Talla " + p.talla].filter(Boolean); return d.length ? " (" + d.join(", ") + ")" : ""; };
+  var gn = function (g) { return (g[0].grupo || "").trim() || g[0].nombre; };
   var minP = function (g) { return Math.min.apply(null, g.map(function (p) { return p.precio; })); };
 
   function grupos() {
@@ -56,9 +58,10 @@
     var desde = Math.max.apply(null, g.map(function (v) { return v.precio; })) !== minP(g);
     return '<a class="card' + (ago ? " ago" : "") + '" href="#' + encodeURIComponent(p.id) + '"><div class="im">' +
       (ago ? '<span class="pill a">AGOTADO</span>' : "") + (nuevo ? '<span class="pill n">NUEVO</span>' : "") +
-      '<img src="' + src(p, "frente") + '" alt="' + esc(p.nombre) + '" loading="lazy">' +
+      (g.length > 1 ? '<span class="pill c">' + g.length + " " + (g.every(function (v) { return v.color; }) ? "COLORES" : "OPCIONES") + "</span>" : "") +
+      '<img src="' + src(p, "frente") + '" alt="' + esc(gn(g)) + '" loading="lazy">' +
       (p.imagen_diagonal ? '<img src="' + src(p, "diagonal") + '" alt="" loading="lazy">' : "") +
-      '</div><div class="inf"><span>' + esc(p.nombre) + "</span><span>" + (desde ? "DESDE " : "") + precio(minP(g)) + "</span></div></a>";
+      '</div><div class="inf"><span>' + esc(gn(g)) + "</span><span>" + (desde ? "DESDE " : "") + precio(minP(g)) + "</span></div></a>";
   }
 
   function lista() {
@@ -66,7 +69,7 @@
     var l = grupos().filter(function (g) { return g.some(function (p) { return (!fc || p.categoria === fc) && (!ft || p.talla === ft) && (!fd || p.stock > 0); }); });
     var ord = function (g) { return Math.min.apply(null, g.map(function (p) { return p.orden; })); };
     l.sort(o === "pa" ? function (a, b) { return minP(a) - minP(b); } : o === "pd" ? function (a, b) { return minP(b) - minP(a); } :
-      o === "n" ? function (a, b) { return a[0].nombre.localeCompare(b[0].nombre, "es"); } : function (a, b) { return ord(a) - ord(b); });
+      o === "n" ? function (a, b) { return gn(a).localeCompare(gn(b), "es"); } : function (a, b) { return ord(a) - ord(b); });
     $("#cuenta").textContent = l.length + (l.length === 1 ? " ANILLO" : " ANILLOS");
     $("#grid").innerHTML = l.length ? l.map(card).join("") : '<p class="vacio">No hay anillos con esos filtros. Prueba quitando alguno.</p>';
   }
@@ -83,9 +86,9 @@
       var nom = v.color || "Opción " + (i + 1);
       return '<button data-v="' + esc(v.id) + '" aria-pressed="' + (v.id === p.id) + '" aria-label="' + esc(nom) + (v.stock < 1 ? " (agotado)" : "") + '" title="' + esc(nom) + '"' + (v.stock < 1 ? ' class="ago"' : "") + '><img src="' + src(v, "frente") + '" alt=""></button>';
     }).join("") + "</div>" : "";
-    $("#fi").innerHTML = '<button class="x" aria-label="Cerrar" data-cerrar>×</button><div class="gal"><img class="big" id="big" src="' + ims[0] + '" alt="' + esc(p.nombre) + '"><div class="th">' +
+    $("#fi").innerHTML = '<button class="x" aria-label="Cerrar" data-cerrar>×</button><div class="gal"><img class="big" id="big" src="' + ims[0] + '" alt="' + esc(gn(g)) + '"><div class="th">' +
       ims.map(function (s, i) { return '<button data-i="' + i + '" aria-label="Ver foto ' + (i + 1) + '" aria-current="' + (i === 0) + '"><img src="' + s + '" alt=""></button>'; }).join("") +
-      '</div></div><div class="det"><h2>' + esc(p.nombre) + '</h2><div class="px">' + (p.antes > p.precio ? "<s>" + precio(p.antes) + "</s>" : "") + precio(p.precio) + "</div>" +
+      '</div></div><div class="det"><h2>' + esc(gn(g)) + '</h2><div class="px">' + (p.antes > p.precio ? "<s>" + precio(p.antes) + "</s>" : "") + precio(p.precio) + "</div>" +
       (p.descripcion ? "<p>" + esc(p.descripcion) + "</p>" : "") +
       "<p>" + [col && "COLOR: " + esc(col), p.talla && "TALLA: " + esc(p.talla), "CÓDIGO: " + esc(p.id)].filter(Boolean).join("<br>") + "</p>" + vr +
       (aviso ? "<p><b>" + aviso + "</b></p>" : "") +
@@ -95,7 +98,7 @@
     if (!$("#ov").classList.contains("on")) lastFocus = document.activeElement;
     $("#ov").classList.add("on"); document.body.style.overflow = "hidden";
     var f = noFoco && $('.vr [aria-pressed="true"]'); (f || $("#fi .x")).focus();
-    document.title = p.nombre + " · Cósmicas";
+    document.title = gn(g) + " · Cósmicas";
   }
 
   function cerrar(sinHash) {
