@@ -8,6 +8,16 @@
   var num = function (v) { return parseFloat(String(v).replace(",", ".")) || 0; };
   var VISTAS = ["frente", "diagonal", "costado"];
 
+  // Estilos del selector de variantes (colores)
+  var st = document.createElement("style");
+  st.textContent = ".vr{display:flex;gap:8px;flex-wrap:wrap}" +
+    ".vr button{position:relative;width:56px;height:56px;padding:0;border:1px solid var(--linea);background:#fff;cursor:pointer}" +
+    ".vr button[aria-pressed=true]{border:2px solid var(--rojo)}" +
+    ".vr img{width:100%;height:100%;object-fit:cover}" +
+    ".vr .ago img{opacity:.4}" +
+    '.vr .ago::after{content:"";position:absolute;inset:0;background:linear-gradient(to top right,transparent calc(50% - 1px),var(--rojo) 50%,transparent calc(50% + 1px))}';
+  document.head.appendChild(st);
+
   function csv(t) {
     t = t.replace(/^\uFEFF/, "");
     var l1 = t.split("\n")[0], d = (l1.match(/;/g) || []).length > (l1.match(/,/g) || []).length ? ";" : ",";
@@ -30,43 +40,61 @@
   var src = function (p, v) { return p.dir + (p["imagen_" + v] || p.imagen_frente); };
   var cant = function (id) { var c = cart.filter(function (x) { return x.id === id; })[0]; return c ? c.q : 0; };
   var guarda = function () { try { localStorage.setItem("cosmicas-carrito", JSON.stringify(cart)); } catch (e) {} };
+  var gk = function (p) { return (p.grupo || "").trim().toLowerCase() || "id:" + p.id; };
+  var det = function (p) { var d = [p.color, p.talla && "Talla " + p.talla].filter(Boolean); return d.length ? " (" + d.join(", ") + ")" : ""; };
+  var minP = function (g) { return Math.min.apply(null, g.map(function (p) { return p.precio; })); };
 
-  function card(p) {
-    var nuevo = /^s[ií]$/i.test(p.destacado) && p.stock > 0;
-    return '<a class="card' + (p.stock < 1 ? " ago" : "") + '" href="#' + encodeURIComponent(p.id) + '"><div class="im">' +
-      (p.stock < 1 ? '<span class="pill a">AGOTADO</span>' : "") + (nuevo ? '<span class="pill n">NUEVO</span>' : "") +
+  function grupos() {
+    var m = {}, o = [];
+    P.forEach(function (p) { var k = gk(p); if (!m[k]) { m[k] = []; o.push(m[k]); } m[k].push(p); });
+    return o;
+  }
+
+  function card(g) {
+    var p = g.filter(function (v) { return v.stock > 0; })[0] || g[0], ago = !g.some(function (v) { return v.stock > 0; });
+    var nuevo = g.some(function (v) { return /^s[ií]$/i.test(v.destacado) && v.stock > 0; });
+    var desde = Math.max.apply(null, g.map(function (v) { return v.precio; })) !== minP(g);
+    return '<a class="card' + (ago ? " ago" : "") + '" href="#' + encodeURIComponent(p.id) + '"><div class="im">' +
+      (ago ? '<span class="pill a">AGOTADO</span>' : "") + (nuevo ? '<span class="pill n">NUEVO</span>' : "") +
       '<img src="' + src(p, "frente") + '" alt="' + esc(p.nombre) + '" loading="lazy">' +
       (p.imagen_diagonal ? '<img src="' + src(p, "diagonal") + '" alt="" loading="lazy">' : "") +
-      '</div><div class="inf"><span>' + esc(p.nombre) + "</span><span>" + precio(p.precio) + "</span></div></a>";
+      '</div><div class="inf"><span>' + esc(p.nombre) + "</span><span>" + (desde ? "DESDE " : "") + precio(minP(g)) + "</span></div></a>";
   }
 
   function lista() {
     var fc = $("#fc").value, ft = $("#ft").value, fd = $("#fd").checked, o = $("#fo").value;
-    var l = P.filter(function (p) { return (!fc || p.categoria === fc) && (!ft || p.talla === ft) && (!fd || p.stock > 0); });
-    l.sort(o === "pa" ? function (a, b) { return a.precio - b.precio; } : o === "pd" ? function (a, b) { return b.precio - a.precio; } :
-      o === "n" ? function (a, b) { return a.nombre.localeCompare(b.nombre, "es"); } : function (a, b) { return a.orden - b.orden; });
+    var l = grupos().filter(function (g) { return g.some(function (p) { return (!fc || p.categoria === fc) && (!ft || p.talla === ft) && (!fd || p.stock > 0); }); });
+    var ord = function (g) { return Math.min.apply(null, g.map(function (p) { return p.orden; })); };
+    l.sort(o === "pa" ? function (a, b) { return minP(a) - minP(b); } : o === "pd" ? function (a, b) { return minP(b) - minP(a); } :
+      o === "n" ? function (a, b) { return a[0].nombre.localeCompare(b[0].nombre, "es"); } : function (a, b) { return ord(a) - ord(b); });
     $("#cuenta").textContent = l.length + (l.length === 1 ? " ANILLO" : " ANILLOS");
     $("#grid").innerHTML = l.length ? l.map(card).join("") : '<p class="vacio">No hay anillos con esos filtros. Prueba quitando alguno.</p>';
   }
 
-  function abrir(id) {
+  function abrir(id, noFoco) {
     var p = P.filter(function (x) { return x.id === id; })[0];
     if (!p) return cerrar(true);
+    var g = P.filter(function (x) { return gk(x) === gk(p); });
     var ims = VISTAS.filter(function (v) { return p["imagen_" + v]; }).map(function (v) { return src(p, v); });
     var disp = p.stock - cant(p.id);
     var aviso = p.stock < 1 ? "AGOTADO" : p.stock === 1 ? "ÚLTIMA UNIDAD" : p.stock <= 3 ? "QUEDAN " + p.stock : "";
+    var col = p.color || (g.length > 1 ? "Opción " + (g.indexOf(p) + 1) : "");
+    var vr = g.length > 1 ? '<div class="vr" role="group" aria-label="Elige una opción">' + g.map(function (v, i) {
+      var nom = v.color || "Opción " + (i + 1);
+      return '<button data-v="' + esc(v.id) + '" aria-pressed="' + (v.id === p.id) + '" aria-label="' + esc(nom) + (v.stock < 1 ? " (agotado)" : "") + '" title="' + esc(nom) + '"' + (v.stock < 1 ? ' class="ago"' : "") + '><img src="' + src(v, "frente") + '" alt=""></button>';
+    }).join("") + "</div>" : "";
     $("#fi").innerHTML = '<button class="x" aria-label="Cerrar" data-cerrar>×</button><div class="gal"><img class="big" id="big" src="' + ims[0] + '" alt="' + esc(p.nombre) + '"><div class="th">' +
       ims.map(function (s, i) { return '<button data-i="' + i + '" aria-label="Ver foto ' + (i + 1) + '" aria-current="' + (i === 0) + '"><img src="' + s + '" alt=""></button>'; }).join("") +
       '</div></div><div class="det"><h2>' + esc(p.nombre) + '</h2><div class="px">' + (p.antes > p.precio ? "<s>" + precio(p.antes) + "</s>" : "") + precio(p.precio) + "</div>" +
       (p.descripcion ? "<p>" + esc(p.descripcion) + "</p>" : "") +
-      "<p>" + [p.color && "COLOR: " + esc(p.color), p.talla && "TALLA: " + esc(p.talla), "CÓDIGO: " + esc(p.id)].filter(Boolean).join("<br>") + "</p>" +
+      "<p>" + [col && "COLOR: " + esc(col), p.talla && "TALLA: " + esc(p.talla), "CÓDIGO: " + esc(p.id)].filter(Boolean).join("<br>") + "</p>" + vr +
       (aviso ? "<p><b>" + aviso + "</b></p>" : "") +
       '<button class="btn" id="add"' + (disp < 1 ? " disabled" : "") + ">" + (p.stock < 1 ? "AGOTADO" : disp < 1 ? "YA ESTÁ EN TU PEDIDO" : "AGREGAR A MI PEDIDO") + "</button>" +
       '<p id="ok" role="status"></p><a class="btn o" href="guia-de-tallas.html">VER GUÍA DE TALLAS</a></div>';
     $("#fi").dataset.id = p.id;
     if (!$("#ov").classList.contains("on")) lastFocus = document.activeElement;
     $("#ov").classList.add("on"); document.body.style.overflow = "hidden";
-    $("#fi .x").focus();
+    var f = noFoco && $('.vr [aria-pressed="true"]'); (f || $("#fi .x")).focus();
     document.title = p.nombre + " · Cósmicas";
   }
 
@@ -78,22 +106,27 @@
     if (lastFocus) lastFocus.focus();
   }
 
-  function ruta() { var id = decodeURIComponent(location.hash.slice(1)); if (id === "pedido") { history.replaceState(null, "", location.pathname + location.search); carrito(true); } else if (id) abrir(id); else if ($("#ov").classList.contains("on")) cerrar(true); }
+  function ruta() {
+    var id = decodeURIComponent(location.hash.slice(1));
+    if (id === "pedido") { history.replaceState(null, "", location.pathname + location.search); carrito(true); }
+    else if (id) abrir(id);
+    else if ($("#ov").classList.contains("on")) cerrar(true);
+  }
 
   function pinta() {
     var it = cart.map(function (c) { return { c: c, p: P.filter(function (x) { return x.id === c.id; })[0] }; }).filter(function (x) { return x.p; });
     var total = it.reduce(function (s, x) { return s + x.p.precio * x.c.q; }, 0), n = it.reduce(function (s, x) { return s + x.c.q; }, 0);
     $("#items").innerHTML = it.length ? it.map(function (x) {
       var p = x.p, c = x.c;
-      return '<div class="it"><img src="' + src(p, "frente") + '" alt=""><div><strong>' + esc(p.nombre) + "</strong><br>" + (p.talla ? "Talla " + esc(p.talla) + " · " : "") + precio(p.precio) +
+      return '<div class="it"><img src="' + src(p, "frente") + '" alt=""><div><strong>' + esc(p.nombre) + "</strong>" + (p.color ? " · " + esc(p.color) : "") + "<br>" + (p.talla ? "Talla " + esc(p.talla) + " · " : "") + precio(p.precio) +
         '<div class="q"><button data-m="' + esc(p.id) + '" aria-label="Quitar uno">−</button>' + c.q + '<button data-p="' + esc(p.id) + '" aria-label="Agregar uno"' + (c.q >= p.stock ? " disabled" : "") + '>+</button></div></div><button class="rm" data-r="' + esc(p.id) + '" aria-label="Eliminar ' + esc(p.nombre) + '">×</button></div>';
     }).join("") : '<p class="vacio">Tu pedido está vacío. ¡Elige tus anillos del catálogo!</p>';
     $("#tot").textContent = precio(total); $("#nc").textContent = n;
     var w = $("#envia");
     if (n) {
-      var msg = "¡Hola Cósmicas! 💫 Quiero hacer este pedido:\n" + it.map(function (x, i) {
-        return (i + 1) + ". " + x.p.id + " · " + x.p.nombre + (x.p.talla ? " (Talla " + x.p.talla + ")" : "") + " · " + precio(x.p.precio) + (x.c.q > 1 ? " x" + x.c.q : "");
-      }).join("\n") + "\n\nTotal: " + precio(total) + "\n\nQuisiera confirmar disponibilidad y cotizar el envío 🚚";
+      var msg = "¡Hola Cósmicas! ✨ Quiero hacer este pedido:\n" + it.map(function (x, i) {
+        return (i + 1) + ". " + x.p.id + " · " + x.p.nombre + det(x.p) + " · " + precio(x.p.precio) + (x.c.q > 1 ? " x" + x.c.q : "");
+      }).join("\n") + "\n\nTotal: " + precio(total) + "\n\nQuisiera confirmar disponibilidad y cotizar el envío";
       w.href = C.waLink(msg); w.setAttribute("aria-disabled", "false"); w.target = "_blank";
     } else { w.href = "#"; w.setAttribute("aria-disabled", "true"); w.removeAttribute("target"); }
   }
@@ -113,6 +146,7 @@
     var t = e.target.closest("button,a"); if (!t) return;
     if (t.matches("[data-cerrar]")) return cerrar();
     if (t.dataset.i != null) { var ims = document.querySelectorAll(".th button"); $("#big").src = t.querySelector("img").src; ims.forEach(function (b) { b.setAttribute("aria-current", b === t); }); }
+    if (t.dataset.v) { history.replaceState(null, "", "#" + encodeURIComponent(t.dataset.v)); return abrir(t.dataset.v, true); }
     if (t.id === "add") { cambia($("#fi").dataset.id, 1); abrir($("#fi").dataset.id); $("#ok").textContent = "Agregado a tu pedido ✓"; }
     if (t.dataset.p) cambia(t.dataset.p, 1);
     if (t.dataset.m) cambia(t.dataset.m, -1);
