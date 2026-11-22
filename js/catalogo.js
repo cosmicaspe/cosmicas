@@ -13,6 +13,9 @@
   st.textContent = ".vr{display:flex;gap:8px;flex-wrap:wrap}" +
     ".vr button{position:relative;width:56px;height:56px;padding:0;border:1px solid var(--linea);background:#fff;cursor:pointer}" +
     ".vr button[aria-pressed=true]{border:2px solid var(--rojo)}" +
+    ".pill.n{right:auto;left:10px}" +
+    ".pill.d{right:10px;background:var(--rojo);color:var(--crema)}" +
+    ".inf s{opacity:.6;font-weight:400;margin-right:6px}" +
     ".pill.c{top:auto;bottom:10px;left:10px;background:var(--crema);color:var(--rojo);border:1px solid var(--rojo)}" +
     ".vr img{width:100%;height:100%;object-fit:cover}" +
     ".vr .ago img{opacity:.4}" +
@@ -56,12 +59,15 @@
     var p = g.filter(function (v) { return v.stock > 0; })[0] || g[0], ago = !g.some(function (v) { return v.stock > 0; });
     var nuevo = g.some(function (v) { return /^s[ií]$/i.test(v.destacado) && v.stock > 0; });
     var desde = Math.max.apply(null, g.map(function (v) { return v.precio; })) !== minP(g);
+    var b = g.slice().sort(function (x, y) { return (y.stock > 0) - (x.stock > 0) || x.precio - y.precio; })[0];
+    var dto = b.antes > b.precio ? Math.round((1 - b.precio / b.antes) * 100) : 0;
     return '<a class="card' + (ago ? " ago" : "") + '" href="#' + encodeURIComponent(p.id) + '"><div class="im">' +
       (ago ? '<span class="pill a">AGOTADO</span>' : "") + (nuevo ? '<span class="pill n">NUEVO</span>' : "") +
+      (dto > 0 ? '<span class="pill d">-' + dto + "%</span>" : "") +
       (g.length > 1 ? '<span class="pill c">' + g.length + " " + (g.every(function (v) { return v.color; }) ? "COLORES" : "OPCIONES") + "</span>" : "") +
       '<img src="' + src(p, "frente") + '" alt="' + esc(gn(g)) + '" loading="lazy">' +
       (p.imagen_diagonal ? '<img src="' + src(p, "diagonal") + '" alt="" loading="lazy">' : "") +
-      '</div><div class="inf"><span>' + esc(gn(g)) + "</span><span>" + (desde ? "DESDE " : "") + precio(minP(g)) + "</span></div></a>";
+      '</div><div class="inf"><span>' + esc(gn(g)) + "</span><span>" + (desde ? "DESDE " : "") + (b.antes > b.precio ? "<s>" + precio(b.antes) + "</s>" : "") + precio(b.precio) + "</span></div></a>";
   }
 
   function lista() {
