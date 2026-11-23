@@ -135,7 +135,7 @@
     $("#tot").textContent = precio(total); $("#nc").textContent = n;
     var w = $("#envia");
     if (n) {
-      var msg = "¡Hola Cósmicas! ✨ Quiero hacer este pedido:\n" + it.map(function (x, i) {
+      var msg = "¡Hola Cósmicas! Quiero hacer este pedido:\n" + it.map(function (x, i) {
         return (i + 1) + ". " + x.p.id + " · " + x.p.nombre + det(x.p) + " · " + precio(x.p.precio) + (x.c.q > 1 ? " x" + x.c.q : "");
       }).join("\n") + "\n\nTotal: " + precio(total) + "\n\nQuisiera confirmar disponibilidad y cotizar el envío";
       w.href = C.waLink(msg); w.setAttribute("aria-disabled", "false"); w.target = "_blank";
