@@ -14,9 +14,11 @@
     ".vr button{position:relative;width:56px;height:56px;padding:0;border:1px solid var(--linea);background:#fff;cursor:pointer}" +
     ".vr button[aria-pressed=true]{border:2px solid var(--rojo)}" +
     ".pill.n{top:auto;bottom:10px;right:10px;left:auto}" +
-    ".pill.d{right:10px;max-width:calc(100% - 20px);line-height:1.4;text-align:center;border-radius:12px;background:var(--rojo);color:var(--crema)}" +
+    ".pill.d{right:10px;max-width:calc(100% - 20px);line-height:1.4;text-align:center;border-radius:12px;background:#000;color:#fff}" +
     ".inf s{opacity:.6;font-weight:400;margin-right:6px}" +
     ".pill.c{top:auto;bottom:10px;left:10px;background:var(--crema);color:var(--rojo);border:1px solid var(--rojo)}" +
+    ".card.ago .im img{opacity:1}" +
+    '.card.ago .im::after{content:"";position:absolute;inset:0;z-index:1;background:rgba(110,110,110,.5)}' +
     ".vr img{width:100%;height:100%;object-fit:cover}" +
     ".vr .ago img{opacity:.4}" +
     '.vr .ago::after{content:"";position:absolute;inset:0;background:linear-gradient(to top right,transparent calc(50% - 1px),var(--rojo) 50%,transparent calc(50% + 1px))}';
